@@ -1,0 +1,46 @@
+---
+- name: Generate kafka server.properties file
+  template:
+    src: ../templates/kraft-server.j2
+    dest: "{{ kafka_installation_path }}/config/kraft/server.properties"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    mode: 0755
+    backup: true
+  vars:
+    all_ips_str: "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    brokers_ip_str: "{{ groups['brokers'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    new_nodes_ip_str: "{{ groups['new-nodes'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    controllers_ip_str: "{{ groups['controllers'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    all_ips_list: "{{ all_ips_str.split(',') }}"
+    all_brokers_list: "{{ brokers_ip_str.split(',') }}"
+    all_new_nodes_list: "{{ new_nodes_ip_str.split(',') }}"
+    all_controllers_list: "{{ controllers_ip_str.split(',') }}"
+  
+- name: Create directory for Kafka log directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+    mode: 0755
+    recurse: true
+  loop:
+    - "{{ kafka_log_dir }}"
+    - "{{ kafka_system_log_dir }}"
+    - "{{ kafka_installation_path }}/logs"
+
+- name: Format Kafka log directory
+  command:
+    cmd: "{{ kafka_installation_path }}/bin/kafka-storage.sh format -t {{ kafka_cluster_id }} -c {{ kafka_installation_path }}/config/kraft/server.properties --ignore-formatted" 
+
+- name: Generate kafka service file
+  template:
+    src: ../templates/kafka-service.j2
+    dest: /etc/systemd/system/kafka.service
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    mode: 0755
+  notify:
+    - Start Kafka service
+    - Enable Kafka service

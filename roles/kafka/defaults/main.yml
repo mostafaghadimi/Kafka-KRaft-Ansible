@@ -1,0 +1,12 @@
+---
+# defaults file for kafka-Kraft
+kafka_user: kafka
+kafka_group: kafka
+kafka_version: 3.3.1
+scala_version: 2.13
+kafka_log_dir: KAFKA_LOG_DIR_PLACEHOLDER 
+skip_downloads: false
+kafka_cluster_id: CLUSTER_ID_PLACEHOLDER  # Add the existing cluster id here
+kafka_system_log_dir: /var/log/kafka
+kafka_create_user_group: true
+kafka_installation_path: /opt/kafka

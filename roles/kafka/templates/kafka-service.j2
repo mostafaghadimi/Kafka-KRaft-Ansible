@@ -1,0 +1,19 @@
+[Unit]
+Description=Apache Kafka
+Documentation=http://kafka.apache.org/documentation.html
+Requires=network.target
+After=network.target
+
+[Service]
+Type=simple
+SuccessExitStatus=143
+ExecStart={{ kafka_installation_path }}/bin/kafka-server-start.sh {{ kafka_installation_path }}/config/kraft/server.properties
+ExecStop={{ kafka_installation_path }}/bin/kafka-server-stop.sh
+StandardOutput=file:/var/log/kafka/out.log
+StandardError=file:/var/log/kafka/err.log
+User={{ kafka_user }}
+Group={{ kafka_group }}
+
+[Install]
+WantedBy=multi-user.target
+Alias=kafka.service

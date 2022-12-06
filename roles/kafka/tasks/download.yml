@@ -1,0 +1,9 @@
+---
+- name: Download Kafka tar file
+  ansible.builtin.get_url:
+    url: "https://downloads.apache.org/kafka/{{ kafka_version }}/kafka_{{ scala_version }}-{{ kafka_version }}.tgz"
+    dest: /tmp
+    mode: 0755
+  register: kafka_tar_file
+
+
