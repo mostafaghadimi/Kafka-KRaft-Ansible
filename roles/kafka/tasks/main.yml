@@ -1,0 +1,42 @@
+---
+- name: Create kafka group
+  group:
+    name: '{{ kafka_group }}'
+    state: present
+    system: yes
+  
+- name: Create kafka user
+  user:
+    name: '{{ kafka_user }}'
+    group: '{{ kafka_group }}'
+    state: present
+    createhome: no
+    system: yes
+
+- name: Create kafka directory
+  file:
+    path: "{{ kafka_installation_path }}"
+    state: directory
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+    mode: 0755
+    recurse: true
+
+- name: download | Download 
+  import_tasks: download.yml
+  when:
+    - not skip_downloads|default(false)
+
+# TODO: Fix the problem of not unarchiving the kafka tar file
+- name: Extract Kafka tar file
+  unarchive:
+    remote_src: true
+    src: "{{ kafka_tar_file.dest }}"
+    dest: " {{ kafka_installation_path }}"
+    extra_opts: [--strip-components=1]
+    creates: "{{ kafka_installation_path }}"
+  register: _extract
+
+- name: configuration | set log directory and cluster metadata
+  import_tasks: configuration.yml
+

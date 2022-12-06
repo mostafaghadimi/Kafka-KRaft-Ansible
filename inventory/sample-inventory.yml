@@ -1,0 +1,60 @@
+all:
+  hosts:
+    kafka1:
+      ansible_user: root
+      ansible_host: 172.30.125.91
+      ip: 172.30.125.91
+      access_ip: 172.30.125.91
+    kafka2:
+      ansible_user: root
+      ansible_host: 172.30.125.92
+      ip: 172.30.125.92
+      access_ip: 172.30.125.92
+    kafka3:
+      ansible_user: root
+      ansible_host: 172.30.125.93
+      ip: 172.30.125.93
+      access_ip: 172.30.125.93
+    kafka4:
+      ansible_user: root
+      ansible_host: 172.30.125.94
+      ip: 172.30.125.94
+      access_ip: 172.30.125.94
+    kafka5:
+      ansible_user: root
+      ansible_host: 172.30.125.95
+      ip: 172.30.125.95
+      access_ip: 172.30.125.95
+    kafka6:
+      ansible_user: root
+      ansible_host: 172.30.125.96
+      ip: 172.30.125.96
+      access_ip: 172.30.125.96
+    kafka7:
+      ansible_user: root
+      ansible_host: 172.30.125.97
+      ip: 172.30.125.97
+      access_ip: 172.30.125.97
+    kafka8:
+      ansible_user: root
+      ansible_host: 172.30.125.98
+      ip: 172.30.125.98
+      access_ip: 172.30.125.98
+  children:
+    new-nodes:
+      hosts:
+        kafka6:
+        kafka7:
+        kafka8:
+    controllers:
+      hosts:
+        kafka1:
+        kafka2:
+        kafka3:
+    brokers:
+      hosts:
+        kafka4:
+        kafka5:
+        kafka6:
+        kafka7:
+        kafka8:

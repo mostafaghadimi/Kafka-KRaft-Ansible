@@ -1,3 +1,3 @@
-- [ ] Add new nodes to the existing cluster
+- [X] Add new nodes to the existing cluster
 - [ ] Setup new cluster
 - [ ] Documenting the use cases
