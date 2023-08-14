@@ -5,7 +5,7 @@
     state: stopped
   become: true
 
-- name: Delete Kafka servie file
+- name: Delete Kafka service file
   ansible.builtin.file:
     path: "{{ kafka_service_path }}"
     state: absent
