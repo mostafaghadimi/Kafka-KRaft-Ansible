@@ -1,0 +1,24 @@
+---
+- name: Stop Kafka
+  ansible.builtin.systemd:
+    name: kafka
+    state: stopped
+  become: true
+
+- name: Delete Kafka servie file
+  ansible.builtin.file:
+    path: "{{ kafka_service_path }}"
+    state: absent
+  become: true
+
+- name: Delete Kafka Files
+  ansible.builtin.file:
+    path: "{{ kafka_installation_path }}"
+    state: absent
+  become: true
+  
+- name: Delete Kafka Log Files
+  ansible.builtin.file:
+    path: "{{ kafka_system_log_dir }}"
+    state: absent
+  become: true
