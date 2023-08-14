@@ -37,7 +37,7 @@
 - name: Generate kafka service file
   template:
     src: ../templates/kafka-service.j2
-    dest: /etc/systemd/system/kafka.service
+    dest: "{{ kafka_service_path }}"
     owner: "{{ kafka_user }}"
     group: "{{ kafka_group }}"
     mode: 0755
