@@ -1,6 +1,6 @@
 ---
 - name: Generate kafka server.properties file
-  template:
+  ansible.builtin.template:
     src: ../templates/kraft-server.j2
     dest: "{{ kafka_installation_path }}/config/kraft/server.properties"
     owner: "{{ kafka_user }}"
@@ -18,7 +18,7 @@
     all_controllers_list: "{{ controllers_ip_str.split(',') }}"
   
 - name: Create directory for Kafka log directory
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: "{{ kafka_user }}"
@@ -31,11 +31,11 @@
     - "{{ kafka_installation_path }}/logs"
 
 - name: Format Kafka log directory
-  command:
+  ansible.builtin.command:
     cmd: "{{ kafka_installation_path }}/bin/kafka-storage.sh format -t {{ kafka_cluster_id }} -c {{ kafka_installation_path }}/config/kraft/server.properties --ignore-formatted" 
 
 - name: Generate kafka service file
-  template:
+  ansible.builtin.template:
     src: ../templates/kafka-service.j2
     dest: "{{ kafka_service_path }}"
     owner: "{{ kafka_user }}"
