@@ -110,5 +110,24 @@
   tags:
     - install
 
+- name: Generate kafka server.properties file
+  become: true
+  ansible.builtin.template:
+    src: ../templates/kraft-server.j2
+    dest: "{{ kafka_installation_path }}/config/kraft/server.properties"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    mode: 0755
+    backup: true
+  vars:
+    all_ips_str: "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    brokers_ip_str: "{{ groups['brokers'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    controllers_ip_str: "{{ groups['controllers'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    all_ips_list: "{{ all_ips_str.split(',') }}"
+    all_brokers_list: "{{ brokers_ip_str.split(',') }}"
+    all_controllers_list: "{{ controllers_ip_str.split(',') }}"
+  tags:
+    - install
+
 - name: configuration | set log directory and cluster metadata
   import_tasks: configuration.yml
