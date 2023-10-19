@@ -87,7 +87,7 @@
     remote_src: true
     src: "{{ kafka_tar_file }}"
     dest: "{{ kafka_installation_path }}"
-    extra_opts: 
+    extra_opts:
       - --strip-components=1
     creates: "{{ kafka_installation_path }}/bin/kafka-storage.sh"
     owner: "{{ kafka_user }}"
