@@ -65,7 +65,7 @@
     - install
     - scale
 
-- name: Set kafka_tar_file value
+- name: Set kafka_tar_file value when tar file not exists
   set_fact:
     kafka_tar_file: "{{ kafka_tar_file.dest }}"
   when: not kafka_tar_file_stat.stat.exists
@@ -73,7 +73,7 @@
     - install
     - scale
 
-- name: Set kafka_tar_file value
+- name: Set kafka_tar_file value when tar file exists
   set_fact:
     kafka_tar_file: "{{ kafka_tar_file_stat.stat.path }}"
   when: kafka_tar_file_stat.stat.exists
@@ -96,6 +96,19 @@
   tags:
     - install
     - scale
+
+- name: Generate Kafka cluster ID
+  ansible.builtin.shell: "{{ kafka_installation_path }}/bin/kafka-storage.sh random-uuid"
+  register: result
+  run_once: true
+  tags:
+    - install
+
+- name: Set Kafka Cluster ID
+  set_fact:
+    kafka_cluster_id: "{{ result.stdout }}"
+  tags:
+    - install
 
 - name: configuration | set log directory and cluster metadata
   import_tasks: configuration.yml
