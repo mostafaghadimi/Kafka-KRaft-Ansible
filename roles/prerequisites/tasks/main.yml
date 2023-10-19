@@ -1,7 +1,7 @@
 ---
 - name: Install JDK and JRE (Java)
   become: true
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600  # one hour 
     name: "{{ pkgs }}"
@@ -10,3 +10,6 @@
     pkgs:
     - openjdk-11-jdk
     - default-jre
+  tags:
+    - install
+    - scale
