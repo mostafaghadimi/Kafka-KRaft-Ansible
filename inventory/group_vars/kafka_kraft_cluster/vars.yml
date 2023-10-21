@@ -3,6 +3,6 @@ kafka_user: kafka
 kafka_group: kafka
 kafka_version: 3.6.0
 scala_version: 2.13
-kafka_log_dir: KAFKA_LOG_DIR_PLACEHOLDER 
+kafka_log_dir: /var/log/kafka 
 kafka_cluster_id: CLUSTER_ID_PLACEHOLDER  # Add the existing cluster id here
 kafka_create_user_group: true
