@@ -110,6 +110,23 @@
   tags:
     - install
 
+- name: Create directory for Kafka log directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+    mode: 0755
+    recurse: true
+  loop:
+    - "{{ kafka_log_dir }}"
+    - "{{ kafka_system_log_dir }}"
+    - "{{ kafka_installation_path }}/logs"
+  tags:
+    - install
+    - scale
+
 - name: Generate kafka server.properties file
   become: true
   ansible.builtin.template:
