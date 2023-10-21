@@ -1,5 +1,6 @@
 ---
 - name: Generate kafka server.properties file
+  become: true
   ansible.builtin.template:
     src: ../templates/kraft-server.j2
     dest: "{{ kafka_installation_path }}/config/kraft/server.properties"
@@ -16,25 +17,19 @@
     all_brokers_list: "{{ brokers_ip_str.split(',') }}"
     all_new_nodes_list: "{{ new_nodes_ip_str.split(',') }}"
     all_controllers_list: "{{ controllers_ip_str.split(',') }}"
-  
-- name: Create directory for Kafka log directory
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ kafka_user }}"
-    group: "{{ kafka_user }}"
-    mode: 0755
-    recurse: true
-  loop:
-    - "{{ kafka_log_dir }}"
-    - "{{ kafka_system_log_dir }}"
-    - "{{ kafka_installation_path }}/logs"
+  tags:
+    - scale
 
 - name: Format Kafka log directory
+  become: true
   ansible.builtin.command:
     cmd: "{{ kafka_installation_path }}/bin/kafka-storage.sh format -t {{ kafka_cluster_id }} -c {{ kafka_installation_path }}/config/kraft/server.properties --ignore-formatted" 
+  tags:
+    - install
+    - scale
 
 - name: Generate kafka service file
+  become: true
   ansible.builtin.template:
     src: ../templates/kafka-service.j2
     dest: "{{ kafka_service_path }}"
@@ -44,3 +39,6 @@
   notify:
     - Start Kafka service
     - Enable Kafka service
+  tags:
+    - install
+    - scale
