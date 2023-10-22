@@ -1,12 +1,14 @@
 ---
 # handlers file for kafka-Kraft
 - name: Start Kafka service
+  become: true
   systemd:
     name: kafka
     state: started
     daemon_reload: true
 
 - name: Enable Kafka service
+  become: true
   systemd:
     name: kafka
     enabled: true
